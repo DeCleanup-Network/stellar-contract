@@ -1,5 +1,4 @@
-
-use soroban_sdk::{String, Address};
+use soroban_sdk::{Address, String};
 pub struct NFTMetadata {
     pub name: String,
     pub description: String,

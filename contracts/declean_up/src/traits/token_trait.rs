@@ -1,4 +1,4 @@
-use  soroban_sdk::{Env, Address, String};
+use soroban_sdk::{Address, Env, String};
 pub trait TokenInterface {
     /// Returns the allowance for `spender` to transfer from `from`.
     ///

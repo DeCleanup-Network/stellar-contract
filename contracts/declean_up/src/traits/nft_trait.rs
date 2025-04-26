@@ -1,5 +1,5 @@
-use soroban_sdk::{Env, Address};
 use crate::structs::nft_metadata::NFTMetadata;
+use soroban_sdk::{Address, Env};
 pub trait NFTInterface {
     /// Mint a new NFT with unique metadata
     fn mint(env: Env, to: Address, metadata: NFTMetadata);

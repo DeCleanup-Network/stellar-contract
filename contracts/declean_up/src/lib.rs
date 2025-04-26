@@ -22,5 +22,5 @@ impl Contract {
 mod test;
 pub mod token;
 
-pub mod  traits;
 pub mod structs;
+pub mod traits;
