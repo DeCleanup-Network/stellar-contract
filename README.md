@@ -1,1 +1,1 @@
-# steller-contract
+# stellar-contract
