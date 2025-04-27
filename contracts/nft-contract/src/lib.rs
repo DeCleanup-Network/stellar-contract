@@ -3,7 +3,7 @@ mod errors;
 mod types;
 mod storage;
 
-use soroban_sdk::{contract, contractimpl, vec, Env, String, Vec, Address};
+use soroban_sdk::{contract, contractimpl, vec, Env, String, Vec, Address, symbol_short};
 use storage::NFTStorageLayer;
 use crate::{errors::NFTError, types::*};
 
@@ -35,9 +35,37 @@ impl NFTContract {
     }
 
 
-    // pub fn mint(env: Env, to: Address) -> Result<(), NFTError> {
-        
-    // }
+    pub fn mint(env: Env, 
+                to: Address,
+                name: String,
+                description: String,
+                image_url: String,
+                level: u32,
+    ) -> Result<(), NFTError> {
+        let admin = NFTStorageLayer::retrieve_admin(&env);
+        admin.require_auth();
+
+        let token_id: u32 = env.storage().instance().get(&COUNTER_KEY).unwrap();
+        env.storage().instance().set(&COUNTER_KEY, &(token_id + 1));
+
+        let metadata = NFTMetadata {
+            name,
+            description,
+            image_url,
+            level,
+            owner: to
+        };
+
+        NFTStorageLayer::set_token_owner(&env, &token_id, &to);
+        NFTStorageLayer::set_token_metadata(&env, &token_id, &metadata);
+
+        NFTStorageLayer::increment_balance(&env, &to);
+
+        let mint_topic = (symbol_short!("mint"), to);
+        env.events().publish(mint_topic, token_id);
+
+        Ok(())
+    }
 }
 
 mod test;
