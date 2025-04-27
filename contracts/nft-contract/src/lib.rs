@@ -31,6 +31,10 @@ impl NFTContract {
 
         NFTStorageLayer::set_admin(&env, &admin);
         env.storage().instance().set(&COUNTER_KEY, &0u32);
+
+        let topics = (symbol_short!("init"), &admin);
+        env.events().publish(topics, &admin);
+
         Ok(())
     }
 
@@ -107,6 +111,34 @@ impl NFTContract {
             .unwrap_or_else(|| panic!("NFT Metadata not found"));
 
         metadata
+
+    }
+
+    pub fn burn(env: Env, from: Address, token_id: u32) -> Result<(), NFTError> {
+        let token_owner = NFTStorageLayer::get_token_owner(&env, &token_id)
+            .ok_or(NFTError::TokenDoesNotExist)?;
+
+
+        if token_owner != from {
+            return Err(NFTError::InvalidTokenOwner);
+        }
+
+        
+        from.require_auth();
+
+         // Delete the token owner
+        env.storage().instance().remove(&TokenKey::TokenOwner(token_id));
+
+        // Delete the token metadata
+        env.storage().instance().remove(&TokenKey::TokenMetadata(token_id));
+
+        // Decrease user's balance
+        NFTStorageLayer::decrement_balance(&env, &from);
+
+        let topics = (symbol_short!("burn"), from);
+        env.events().publish(topics, token_id);
+
+        Ok(())
 
     }
 }
