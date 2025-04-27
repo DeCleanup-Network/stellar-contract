@@ -1,4 +1,5 @@
 #![no_std]
+mod errors;
 use soroban_sdk::{contract, contractimpl, vec, Env, String, Vec};
 #[contract]
 pub struct Contract;
