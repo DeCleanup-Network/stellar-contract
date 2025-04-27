@@ -4,7 +4,8 @@ mod types;
 mod storage;
 
 use soroban_sdk::{contract, contractimpl, vec, Env, String, Vec, Address};
-use crate::{errors::NFTError};
+use storage::NFTStorageLayer;
+use crate::{errors::NFTError, types::*};
 
 
 
@@ -22,9 +23,21 @@ pub struct NFTContract;
 // <https://developers.stellar.org/docs/build/smart-contracts/overview>.
 #[contractimpl]
 impl NFTContract {
-    pub fn mint(env: Env, to: Address) -> Result<(), NFTError> {
-        
+
+    pub fn init_admin(env: Env, admin: Address) -> Result<(), NFTError> {
+        if env.storage().instance().has(&ADMIN_KEY) {
+            return Err(NFTError::AdminAlreadyExists)
+        }
+
+        NFTStorageLayer::set_admin(&env, &admin);
+        env.storage().instance().set(&COUNTER_KEY, &0u32);
+        Ok(())
     }
+
+
+    // pub fn mint(env: Env, to: Address) -> Result<(), NFTError> {
+        
+    // }
 }
 
 mod test;

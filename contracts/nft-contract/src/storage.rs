@@ -1,9 +1,9 @@
 use crate::types::{TokenKey, NFTMetadata, ADMIN_KEY};
 use soroban_sdk::{Address, Env};
 
-pub struct NFTStorage;
+pub struct NFTStorageLayer;
 
-impl NFTStorage {
+impl NFTStorageLayer {
     pub fn set_admin(env: &Env, admin: &Address) {
         env.storage().instance().set(&ADMIN_KEY, admin);
     }
@@ -16,22 +16,22 @@ impl NFTStorage {
         let balance: u32 = env
             .storage()
             .instance()
-            .get(&TokenKey::UserBalance(address.clone()))
+            .get(&TokenKey::UserTokenBalance(address.clone()))
             .unwrap_or(0);
         env.storage()
             .instance()
-            .set(&TokenKey::UserBalance(address.clone()), &(balance + 1));
+            .set(&TokenKey::UserTokenBalance(address.clone()), &(balance + 1));
     }
 
     pub fn decrement_balance(env: &Env, address: &Address) {
         let balance: u32 = env
             .storage()
             .instance()
-            .get(&TokenKey::UserBalance(address.clone()))
+            .get(&TokenKey::UserTokenBalance(address.clone()))
             .unwrap_or(0);
         env.storage()
             .instance()
-            .set(&TokenKey::UserBalance(address.clone()), &(balance - 1));
+            .set(&TokenKey::UserTokenBalance(address.clone()), &(balance - 1));
     }
 
 

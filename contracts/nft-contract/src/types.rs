@@ -19,5 +19,5 @@ pub enum TokenKey {
     TokenOwner(u32),
     TokenMetadata(u32),
     TokenUri(u32),
-    UserBalance(Address),
+    UserTokenBalance(Address),
 }
