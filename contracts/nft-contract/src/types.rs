@@ -15,7 +15,7 @@ pub struct NFTMetadata {
 
 #[contracttype]
 #[derive(Clone)]
-pub enum DataKey {
+pub enum TokenKey {
     TokenOwner(u32),
     TokenMetadata(u32),
     TokenUri(u32),
