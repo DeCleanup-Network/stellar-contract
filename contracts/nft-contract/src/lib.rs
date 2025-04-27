@@ -98,6 +98,17 @@ impl NFTContract {
 
         Ok(())
     }
+
+    pub fn get_metadata(env: Env, token_id: u32) -> NFTMetadata {
+        let _owner = NFTStorageLayer::get_token_owner(&env, &token_id)
+            .unwrap_or_else(|| panic!("NFT Token not found"));
+
+        let metadata = NFTStorageLayer::get_token_metadata(&env, &token_id)
+            .unwrap_or_else(|| panic!("NFT Metadata not found"));
+
+        metadata
+
+    }
 }
 
 mod test;
