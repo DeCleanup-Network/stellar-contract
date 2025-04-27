@@ -53,7 +53,7 @@ impl NFTContract {
             description,
             image_url,
             level,
-            owner: to
+            owner: to.clone()
         };
 
         NFTStorageLayer::set_token_owner(&env, &token_id, &to);
@@ -63,6 +63,38 @@ impl NFTContract {
 
         let mint_topic = (symbol_short!("mint"), to);
         env.events().publish(mint_topic, token_id);
+
+        Ok(())
+    }
+
+
+    pub fn transfer(
+        env: Env,
+        from: Address,
+        to: Address,
+        token_id: u32,
+    ) -> Result<(), NFTError> {
+       
+        let token_owner = NFTStorageLayer::get_token_owner(&env, &token_id)
+            .ok_or(NFTError::TokenDoesNotExist)?;
+        
+        if token_owner != from {
+            return Err(NFTError::InvalidTokenOwner);
+        }
+
+        
+        from.require_auth();
+
+       
+        NFTStorageLayer::set_token_owner(&env, &token_id, &to);
+        
+        
+        NFTStorageLayer::decrement_balance(&env, &from);
+        NFTStorageLayer::increment_balance(&env, &to);
+
+        
+        let topics = (symbol_short!("transfer"), from, to);
+        env.events().publish(topics, token_id);
 
         Ok(())
     }
