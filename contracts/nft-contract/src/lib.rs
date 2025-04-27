@@ -1,8 +1,15 @@
 #![no_std]
 mod errors;
-use soroban_sdk::{contract, contractimpl, vec, Env, String, Vec};
+mod types;
+mod storage;
+
+use soroban_sdk::{contract, contractimpl, vec, Env, String, Vec, Address};
+use crate::{errors::NFTError};
+
+
+
 #[contract]
-pub struct Contract;
+pub struct NFTContract;
 
 // This is a sample contract. Replace this placeholder with your own contract logic.
 // A corresponding test example is available in `test.rs`.
@@ -14,9 +21,9 @@ pub struct Contract;
 // Refer to the official documentation:
 // <https://developers.stellar.org/docs/build/smart-contracts/overview>.
 #[contractimpl]
-impl Contract {
-    pub fn hello(env: Env, to: String) -> Vec<String> {
-        vec![&env, String::from_str(&env, "Hello"), to]
+impl NFTContract {
+    pub fn mint(env: Env, to: Address) -> Result<(), NFTError> {
+        
     }
 }
 
