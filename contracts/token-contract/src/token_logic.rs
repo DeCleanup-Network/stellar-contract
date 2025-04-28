@@ -137,4 +137,30 @@ impl TokenInterface for Token {
         // Emit burn event
         env.events().publish((symbol_short!("burn"), from), amount);
     }
+
+
+    //==== decimals function ====//
+    fn decimals(env: Env) -> u32 {
+        env.storage()
+            .persistent()
+            .get(&STORAGE_DECIMALS)
+            .unwrap_or(18) // Default to 18 if not set
+    }
+
+    //==== name function ====//
+    fn name(env: Env) -> String {
+        env.storage()
+            .persistent()
+            .get(&STORAGE_NAME)
+            .unwrap_or_else(|| String::from_str(&env, "My Token")) // Default to "My Token" if not initialized
+    }
+
+    //==== symbol function ====//
+    fn symbol(env: Env) -> String {
+        env.storage()
+            .persistent()
+            .get(&STORAGE_SYMBOL)
+            .unwrap_or_else(|| String::from_str(&env, "MYTOKEN")) // Default to "MYTOKEN" if not initialized
+    }
+
 }
