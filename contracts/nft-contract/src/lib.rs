@@ -47,6 +47,7 @@ impl NFTContract {
                 level: u32,
     ) -> Result<(), NFTError> {
         let admin = NFTStorageLayer::retrieve_admin(&env);
+
         admin.require_auth();
 
         let token_id: u32 = env.storage().instance().get(&COUNTER_KEY).unwrap();
