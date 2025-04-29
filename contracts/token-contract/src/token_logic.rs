@@ -49,6 +49,7 @@ impl TokenInterface for Token {
         let from_key = (symbol_short!("balance"), from.clone());
         let mut from_balance = env.storage().persistent().get(&from_key).unwrap_or(0);
         assert!(from_balance >= amount, "insufficient balance");
+        assert!(amount > 0, "Amount must be positive");
 
         from_balance -= amount;
         env.storage().persistent().set(&from_key, &from_balance);
@@ -77,8 +78,8 @@ impl TokenInterface for Token {
         }
 
         //==== Check if there is enough allowance for the transfer ====//
-
         assert!(allowance >= amount, "insufficient allowance");
+        assert!(amount > 0, "Amount must be positive");
 
         allowance -= amount;
         env.storage().persistent().set(&allowance_key, &allowance);
@@ -107,6 +108,7 @@ impl TokenInterface for Token {
         let from_key = (symbol_short!("balance"), from.clone());
         let mut from_balance = env.storage().persistent().get(&from_key).unwrap_or(0);
         assert!(from_balance >= amount, "insufficient balance");
+        assert!(amount > 0, "Amount must be positive");
 
         from_balance -= amount;
         env.storage().persistent().set(&from_key, &from_balance);
@@ -122,6 +124,7 @@ impl TokenInterface for Token {
         let allowance_key = (symbol_short!("allowance"), from.clone(), spender.clone());
         let mut allowance = env.storage().persistent().get(&allowance_key).unwrap_or(0);
         assert!(allowance >= amount, "insufficient allowance");
+        assert!(amount > 0, "Amount must be positive");
 
         allowance -= amount;
         env.storage().persistent().set(&allowance_key, &allowance);
