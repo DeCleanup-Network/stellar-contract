@@ -42,7 +42,6 @@ impl TokenInterface for Token {
         env.storage().persistent().get(&key).unwrap_or(0)
     }
 
-    
     //==== transfer function ====//
     fn transfer(env: Env, from: Address, to: Address, amount: i128) {
         from.require_auth(); //==== Ensure the 'from' address has authorization to perform the transfer.
@@ -138,7 +137,6 @@ impl TokenInterface for Token {
         env.events().publish((symbol_short!("burn"), from), amount);
     }
 
-
     //==== decimals function ====//
     fn decimals(env: Env) -> u32 {
         env.storage()
@@ -162,5 +160,4 @@ impl TokenInterface for Token {
             .get(&STORAGE_SYMBOL)
             .unwrap_or_else(|| String::from_str(&env, "MYTOKEN")) // Default to "MYTOKEN" if not initialized
     }
-
 }
